@@ -1,0 +1,776 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>The Dink House | Pickleball · Vanderbijlpark</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;900&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --lime: #C8F135;
+    --lime-dark: #a3c920;
+    --charcoal: #1a1c1e;
+    --charcoal2: #242628;
+    --charcoal3: #2e3032;
+    --offwhite: #f5f5f2;
+    --muted: #8a8f94;
+    --white: #ffffff;
+    --radius: 10px;
+    --radius-lg: 16px;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Barlow', sans-serif;
+    background: var(--charcoal);
+    color: var(--offwhite);
+    font-size: 16px;
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    background: rgba(26,28,30,0.95);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid rgba(200,241,53,0.15);
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 5%;
+    height: 64px;
+  }
+  .nav-logo {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 900; font-size: 1.5rem;
+    color: var(--lime); text-decoration: none;
+    letter-spacing: 0.03em;
+  }
+  .nav-logo span { color: var(--offwhite); }
+  .nav-links { display: flex; gap: 2rem; list-style: none; }
+  .nav-links a {
+    color: var(--offwhite); text-decoration: none;
+    font-size: 0.9rem; font-weight: 500;
+    letter-spacing: 0.04em; text-transform: uppercase;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--lime); }
+  .nav-cta {
+    background: var(--lime); color: var(--charcoal) !important;
+    padding: 8px 18px; border-radius: 6px; font-weight: 600 !important;
+  }
+  .nav-cta:hover { background: var(--lime-dark); color: var(--charcoal) !important; }
+  .hamburger {
+    display: none; flex-direction: column; gap: 5px;
+    cursor: pointer; background: none; border: none; padding: 4px;
+  }
+  .hamburger span {
+    display: block; width: 24px; height: 2px;
+    background: var(--offwhite); border-radius: 2px; transition: 0.3s;
+  }
+  .mobile-menu {
+    display: none; position: fixed; top: 64px; left: 0; right: 0;
+    background: var(--charcoal2); z-index: 99;
+    flex-direction: column; padding: 1.5rem 5%;
+    border-bottom: 1px solid rgba(200,241,53,0.2);
+  }
+  .mobile-menu.open { display: flex; }
+  .mobile-menu a {
+    color: var(--offwhite); text-decoration: none;
+    font-size: 1.1rem; font-weight: 500; padding: 0.75rem 0;
+    border-bottom: 1px solid rgba(255,255,255,0.07);
+    text-transform: uppercase; letter-spacing: 0.04em;
+  }
+  .mobile-menu a:last-child { border-bottom: none; color: var(--lime); font-weight: 600; }
+
+  /* HERO */
+  #hero {
+    min-height: 100vh;
+    display: flex; flex-direction: column;
+    justify-content: center; align-items: flex-start;
+    padding: 100px 5% 60px;
+    position: relative; overflow: hidden;
+  }
+  .hero-bg {
+    position: absolute; inset: 0; z-index: 0;
+    background:
+      repeating-linear-gradient(0deg, transparent, transparent 60px, rgba(200,241,53,0.03) 60px, rgba(200,241,53,0.03) 61px),
+      repeating-linear-gradient(90deg, transparent, transparent 60px, rgba(200,241,53,0.03) 60px, rgba(200,241,53,0.03) 61px);
+  }
+  .hero-ball {
+    position: absolute; right: -60px; top: 50%; transform: translateY(-50%);
+    width: 480px; height: 480px; border-radius: 50%;
+    background: radial-gradient(circle at 35% 35%, rgba(200,241,53,0.18), rgba(200,241,53,0.04) 60%, transparent 80%);
+    border: 1px solid rgba(200,241,53,0.12);
+    pointer-events: none;
+  }
+  .hero-ball::after {
+    content: ''; position: absolute; inset: 30px; border-radius: 50%;
+    border: 1px solid rgba(200,241,53,0.08);
+  }
+  .hero-content { position: relative; z-index: 1; max-width: 700px; }
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: rgba(200,241,53,0.1); border: 1px solid rgba(200,241,53,0.3);
+    color: var(--lime); font-size: 0.8rem; font-weight: 600;
+    padding: 5px 14px; border-radius: 20px; margin-bottom: 1.5rem;
+    text-transform: uppercase; letter-spacing: 0.08em;
+  }
+  .hero-badge::before {
+    content: ''; width: 7px; height: 7px; border-radius: 50%;
+    background: var(--lime); animation: pulse 2s infinite;
+  }
+  @keyframes pulse {
+    0%,100% { opacity: 1; } 50% { opacity: 0.4; }
+  }
+  h1 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 900; font-size: clamp(3.5rem, 9vw, 7rem);
+    line-height: 0.95; letter-spacing: -0.01em;
+    text-transform: uppercase; margin-bottom: 1.5rem;
+  }
+  h1 .accent { color: var(--lime); display: block; }
+  .hero-sub {
+    font-size: 1.1rem; color: var(--muted);
+    max-width: 480px; margin-bottom: 2.5rem;
+  }
+  .hero-sub strong { color: var(--offwhite); }
+  .btn-group { display: flex; gap: 1rem; flex-wrap: wrap; }
+  .btn-primary {
+    background: var(--lime); color: var(--charcoal);
+    border: none; padding: 14px 32px; border-radius: 8px;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700; font-size: 1.1rem; letter-spacing: 0.05em;
+    text-transform: uppercase; cursor: pointer; text-decoration: none;
+    transition: background 0.2s, transform 0.15s;
+    display: inline-block;
+  }
+  .btn-primary:hover { background: var(--lime-dark); transform: translateY(-2px); }
+  .btn-outline {
+    background: transparent; color: var(--offwhite);
+    border: 1.5px solid rgba(255,255,255,0.25); padding: 14px 32px;
+    border-radius: 8px; font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700; font-size: 1.1rem; letter-spacing: 0.05em;
+    text-transform: uppercase; cursor: pointer; text-decoration: none;
+    transition: border-color 0.2s, transform 0.15s; display: inline-block;
+  }
+  .btn-outline:hover { border-color: var(--lime); color: var(--lime); transform: translateY(-2px); }
+
+  /* STATS BAR */
+  .stats-bar {
+    background: var(--charcoal2);
+    border-top: 1px solid rgba(255,255,255,0.06);
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    padding: 1.5rem 5%;
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(140px,1fr));
+    gap: 1rem;
+  }
+  .stat-item { text-align: center; }
+  .stat-num {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 900; font-size: 2rem; color: var(--lime);
+  }
+  .stat-label { font-size: 0.8rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; }
+
+  /* SECTIONS */
+  section { padding: 80px 5%; }
+  section:nth-child(even) { background: var(--charcoal2); }
+  .section-label {
+    font-size: 0.75rem; font-weight: 700; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--lime); margin-bottom: 0.75rem;
+  }
+  h2 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 900; font-size: clamp(2rem, 5vw, 3.2rem);
+    text-transform: uppercase; line-height: 1; margin-bottom: 1.5rem;
+  }
+
+  /* HOURS */
+  .hours-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(200px,1fr));
+    gap: 1rem; margin-top: 2rem;
+  }
+  .hour-card {
+    background: var(--charcoal3);
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: var(--radius); padding: 1.25rem;
+    transition: border-color 0.2s;
+  }
+  .hour-card:hover { border-color: rgba(200,241,53,0.3); }
+  .hour-card.closed { opacity: 0.45; }
+  .hour-card.special { border-color: rgba(200,241,53,0.4); background: rgba(200,241,53,0.04); }
+  .day-name {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700; font-size: 1.1rem; letter-spacing: 0.04em;
+    text-transform: uppercase; margin-bottom: 4px;
+  }
+  .day-hours { font-size: 1.3rem; font-weight: 600; color: var(--lime); }
+  .hour-card.closed .day-hours { color: var(--muted); }
+  .day-note { font-size: 0.8rem; color: var(--muted); margin-top: 4px; }
+
+  /* EVENTS */
+  .events-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(280px,1fr));
+    gap: 1.5rem; margin-top: 2rem;
+  }
+  .event-card {
+    background: var(--charcoal3);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: var(--radius-lg); overflow: hidden;
+    transition: transform 0.2s, border-color 0.2s;
+  }
+  .event-card:hover { transform: translateY(-4px); border-color: rgba(200,241,53,0.4); }
+  .event-banner {
+    background: var(--lime); padding: 1.25rem 1.5rem;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .event-banner.americano { background: #ff6b35; }
+  .event-day {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 900; font-size: 1.5rem;
+    color: var(--charcoal); text-transform: uppercase;
+  }
+  .event-price {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 900; font-size: 2rem; color: var(--charcoal);
+  }
+  .event-body { padding: 1.5rem; }
+  .event-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 900; font-size: 1.6rem; text-transform: uppercase;
+    margin-bottom: 0.5rem;
+  }
+  .event-desc { color: var(--muted); font-size: 0.95rem; margin-bottom: 1rem; line-height: 1.5; }
+  .event-time {
+    display: flex; align-items: center; gap: 6px;
+    font-size: 0.85rem; color: var(--offwhite); font-weight: 500;
+  }
+  .event-time::before {
+    content: ''; width: 8px; height: 8px; border-radius: 50%;
+    background: var(--lime); flex-shrink: 0;
+  }
+  .event-card:nth-child(2) .event-time::before { background: #ff6b35; }
+  .event-tags { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 0.75rem; }
+  .tag {
+    font-size: 0.72rem; font-weight: 600; letter-spacing: 0.06em;
+    text-transform: uppercase; padding: 3px 10px; border-radius: 20px;
+    background: rgba(255,255,255,0.07); color: var(--muted);
+  }
+
+  /* BOOKING FORM */
+  #booking { background: var(--charcoal); }
+  .booking-layout {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 4rem; align-items: start; margin-top: 2rem;
+  }
+  .booking-info h3 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700; font-size: 1.4rem; text-transform: uppercase;
+    margin: 1.5rem 0 0.5rem;
+  }
+  .booking-info p { color: var(--muted); font-size: 0.95rem; }
+  .info-box {
+    background: rgba(200,241,53,0.06);
+    border: 1px solid rgba(200,241,53,0.2);
+    border-radius: var(--radius); padding: 1.25rem;
+    margin-top: 1.5rem;
+  }
+  .info-box p { color: var(--offwhite); font-size: 0.9rem; }
+  .info-box strong { color: var(--lime); }
+  .form-card {
+    background: var(--charcoal2);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: var(--radius-lg); padding: 2rem;
+  }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  .form-group { margin-bottom: 1.25rem; }
+  .form-group label {
+    display: block; font-size: 0.8rem; font-weight: 600;
+    text-transform: uppercase; letter-spacing: 0.07em;
+    color: var(--muted); margin-bottom: 6px;
+  }
+  .form-group input,
+  .form-group select,
+  .form-group textarea {
+    width: 100%; background: var(--charcoal3);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 8px; padding: 11px 14px;
+    color: var(--offwhite); font-family: 'Barlow', sans-serif;
+    font-size: 0.95rem; outline: none;
+    transition: border-color 0.2s;
+  }
+  .form-group input:focus,
+  .form-group select:focus,
+  .form-group textarea:focus { border-color: var(--lime); }
+  .form-group select { cursor: pointer; }
+  .form-group select option { background: var(--charcoal3); }
+  .form-group textarea { resize: vertical; min-height: 90px; }
+  .form-submit {
+    width: 100%; padding: 14px;
+    background: var(--lime); color: var(--charcoal);
+    border: none; border-radius: 8px; cursor: pointer;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 900; font-size: 1.2rem; letter-spacing: 0.06em;
+    text-transform: uppercase; transition: background 0.2s, transform 0.15s;
+  }
+  .form-submit:hover { background: var(--lime-dark); transform: translateY(-2px); }
+  .form-note { font-size: 0.8rem; color: var(--muted); text-align: center; margin-top: 0.75rem; }
+  .success-msg {
+    display: none; background: rgba(200,241,53,0.1);
+    border: 1px solid rgba(200,241,53,0.4);
+    border-radius: 8px; padding: 1rem 1.25rem;
+    color: var(--lime); font-size: 0.95rem; font-weight: 500;
+    margin-top: 1rem;
+  }
+
+  /* FIND US */
+  .find-grid {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 3rem; margin-top: 2rem; align-items: start;
+  }
+  .contact-details { display: flex; flex-direction: column; gap: 1rem; }
+  .contact-item {
+    display: flex; align-items: flex-start; gap: 1rem;
+    background: var(--charcoal3);
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: var(--radius); padding: 1rem 1.25rem;
+  }
+  .contact-icon {
+    width: 36px; height: 36px; border-radius: 8px;
+    background: rgba(200,241,53,0.1); display: flex;
+    align-items: center; justify-content: center; flex-shrink: 0;
+    font-size: 1rem;
+  }
+  .contact-label { font-size: 0.75rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 2px; }
+  .contact-value { font-size: 0.95rem; font-weight: 500; color: var(--offwhite); }
+  .contact-value a { color: var(--lime); text-decoration: none; }
+  .map-placeholder {
+    background: var(--charcoal3);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: var(--radius-lg); overflow: hidden;
+    aspect-ratio: 4/3;
+  }
+  .map-placeholder iframe { width: 100%; height: 100%; border: none; filter: brightness(0.8) saturate(0.7); }
+
+  /* FOOTER */
+  footer {
+    background: var(--charcoal2);
+    border-top: 1px solid rgba(255,255,255,0.06);
+    padding: 2.5rem 5%;
+    display: flex; align-items: center; justify-content: space-between;
+    flex-wrap: wrap; gap: 1rem;
+  }
+  .footer-logo {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 900; font-size: 1.3rem; color: var(--lime);
+  }
+  .footer-logo span { color: var(--offwhite); }
+  footer p { font-size: 0.82rem; color: var(--muted); }
+  .footer-links { display: flex; gap: 1.5rem; }
+  .footer-links a {
+    font-size: 0.82rem; color: var(--muted); text-decoration: none;
+    transition: color 0.2s;
+  }
+  .footer-links a:hover { color: var(--lime); }
+
+  /* SCROLL ANIMATION */
+  .fade-in {
+    opacity: 0; transform: translateY(24px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+  .fade-in.visible { opacity: 1; transform: translateY(0); }
+
+  /* RESPONSIVE */
+  @media (max-width: 768px) {
+    .nav-links { display: none; }
+    .hamburger { display: flex; }
+    .hero-ball { width: 260px; height: 260px; right: -80px; top: 30%; }
+    .booking-layout { grid-template-columns: 1fr; gap: 2rem; }
+    .find-grid { grid-template-columns: 1fr; }
+    .form-row { grid-template-columns: 1fr; }
+    section { padding: 60px 5%; }
+    .stats-bar { padding: 1.2rem 5%; }
+  }
+  @media (max-width: 480px) {
+    h1 { font-size: 3rem; }
+    .btn-group { flex-direction: column; }
+    .btn-primary, .btn-outline { text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#hero" class="nav-logo">The Dink <span>House</span></a>
+  <ul class="nav-links">
+    <li><a href="#hours">Hours</a></li>
+    <li><a href="#events">Events</a></li>
+    <li><a href="#booking">Book</a></li>
+    <li><a href="#find-us">Find Us</a></li>
+    <li><a href="#booking" class="nav-cta">Book Now</a></li>
+  </ul>
+  <button class="hamburger" id="hamburger" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+<div class="mobile-menu" id="mobile-menu">
+  <a href="#hours" onclick="closeMenu()">Hours</a>
+  <a href="#events" onclick="closeMenu()">Events</a>
+  <a href="#booking" onclick="closeMenu()">Book a Court</a>
+  <a href="#find-us" onclick="closeMenu()">Find Us</a>
+  <a href="#booking" onclick="closeMenu()">Book Now →</a>
+</div>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-ball"></div>
+  <div class="hero-content">
+    <div class="hero-badge">Now Open in Vanderbijlpark</div>
+    <h1>The Dink<span class="accent">House</span></h1>
+    <p class="hero-sub">
+      Vanderbijlpark's home of pickleball. <strong>All skill levels welcome</strong> — from first-timers to competitive players. Come for the sport, stay for the community.
+    </p>
+    <div class="btn-group">
+      <a href="#booking" class="btn-primary">Book a Court</a>
+      <a href="#events" class="btn-outline">See Events</a>
+    </div>
+  </div>
+</section>
+
+<!-- STATS BAR -->
+<div class="stats-bar">
+  <div class="stat-item">
+    <div class="stat-num">2+</div>
+    <div class="stat-label">Courts Available</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-num">R35</div>
+    <div class="stat-label">Rec Play from</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-num">Weekly</div>
+    <div class="stat-label">Americano Events</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-num">All</div>
+    <div class="stat-label">Skill Levels</div>
+  </div>
+</div>
+
+<!-- HOURS -->
+<section id="hours">
+  <div class="fade-in">
+    <div class="section-label">When to visit</div>
+    <h2>Opening Hours</h2>
+    <p style="color:var(--muted); max-width:500px;">We're open most of the week — come play, practice, or join one of our weekly events. Located in Vanderbijlpark, Gauteng.</p>
+  </div>
+  <div class="hours-grid">
+    <div class="hour-card closed fade-in">
+      <div class="day-name">Monday</div>
+      <div class="day-hours">Closed</div>
+    </div>
+    <div class="hour-card closed fade-in">
+      <div class="day-name">Tuesday</div>
+      <div class="day-hours">Closed</div>
+    </div>
+    <div class="hour-card special fade-in">
+      <div class="day-name">Wednesday</div>
+      <div class="day-hours">14:00 – 20:00</div>
+      <div class="day-note">🏓 Rec Play event at 14:00 – R35 for 2hrs</div>
+    </div>
+    <div class="hour-card fade-in">
+      <div class="day-name">Thursday</div>
+      <div class="day-hours">14:00 – 20:00</div>
+    </div>
+    <div class="hour-card special fade-in">
+      <div class="day-name">Friday</div>
+      <div class="day-hours">14:00 – 20:00</div>
+      <div class="day-note">🏆 Americano event from 18:00 – R50</div>
+    </div>
+    <div class="hour-card fade-in">
+      <div class="day-name">Saturday</div>
+      <div class="day-hours">10:00 – 19:00</div>
+    </div>
+    <div class="hour-card fade-in">
+      <div class="day-name">Sunday</div>
+      <div class="day-hours">10:00 – 19:00</div>
+    </div>
+    <div class="hour-card fade-in">
+      <div class="day-name">Public Holidays</div>
+      <div class="day-hours">10:00 – 15:00</div>
+      <div class="day-note">Check social media for updates</div>
+    </div>
+  </div>
+</section>
+
+<!-- EVENTS -->
+<section id="events">
+  <div class="fade-in">
+    <div class="section-label">Weekly Events</div>
+    <h2>Join the Action</h2>
+    <p style="color:var(--muted); max-width:500px;">Two recurring events every week — casual rec play and our competitive Americano format. Suitable for all levels.</p>
+  </div>
+  <div class="events-grid">
+    <div class="event-card fade-in">
+      <div class="event-banner">
+        <div class="event-day">Wednesday</div>
+        <div class="event-price">R35</div>
+      </div>
+      <div class="event-body">
+        <div class="event-title">Rec Play</div>
+        <p class="event-desc">Relaxed recreational play for all levels. Book your 2-hour session and get matched with other players. Great way to meet the community and improve your game.</p>
+        <div class="event-time">14:00 – 16:00 · 2 hours · All skill levels</div>
+        <div class="event-tags">
+          <span class="tag">Casual</span>
+          <span class="tag">All levels</span>
+          <span class="tag">2 hours</span>
+        </div>
+      </div>
+    </div>
+    <div class="event-card fade-in">
+      <div class="event-banner americano">
+        <div class="event-day">Friday</div>
+        <div class="event-price">R50</div>
+      </div>
+      <div class="event-body">
+        <div class="event-title">Americano</div>
+        <p class="event-desc">Our flagship weekly competition! Round-robin format where you rotate partners and keep your own score. Ends with a bring-and-braai — food, drinks, and great company.</p>
+        <div class="event-time">18:00 – 20:00 · Bring &amp; Braai after</div>
+        <div class="event-tags">
+          <span class="tag">Competitive</span>
+          <span class="tag">Round robin</span>
+          <span class="tag">Braai after</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BOOKING -->
+<section id="booking">
+  <div class="booking-layout">
+    <div class="booking-info fade-in">
+      <div class="section-label">Reserve Your Spot</div>
+      <h2>Book a Court</h2>
+      <p style="color:var(--muted);">Fill in the form and we'll confirm your booking. Group bookings, private lessons, and event registrations all welcome.</p>
+      <h3>What to bring</h3>
+      <p style="color:var(--muted);">Court shoes (no running shoes on the courts), water, and your competitive spirit. Paddles &amp; balls available at the venue.</p>
+      <h3>Group bookings</h3>
+      <p style="color:var(--muted);">Booking for 4 or more? Let us know in the notes and we'll arrange everything, including multi-court options.</p>
+      <div class="info-box">
+        <p>Need to reach us directly?<br/>
+        Call or WhatsApp: <strong>Coming soon</strong><br/>
+        Email: <strong>info@thedinkhouse.co.za</strong></p>
+      </div>
+    </div>
+    <div class="form-card fade-in">
+      <form id="bookingForm">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="firstName">First Name</label>
+            <input type="text" id="firstName" placeholder="e.g. Pieter" required/>
+          </div>
+          <div class="form-group">
+            <label for="lastName">Last Name</label>
+            <input type="text" id="lastName" placeholder="e.g. van der Merwe" required/>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="phone">Phone / WhatsApp</label>
+          <input type="tel" id="phone" placeholder="e.g. 082 000 0000" required/>
+        </div>
+        <div class="form-group">
+          <label for="email">Email Address</label>
+          <input type="email" id="email" placeholder="you@email.com"/>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="bookDate">Preferred Date</label>
+            <input type="date" id="bookDate" required/>
+          </div>
+          <div class="form-group">
+            <label for="bookTime">Preferred Time</label>
+            <select id="bookTime" required>
+              <option value="">Select time</option>
+              <option>14:00</option>
+              <option>15:00</option>
+              <option>16:00</option>
+              <option>17:00</option>
+              <option>18:00</option>
+              <option>19:00</option>
+              <option>10:00 (Sat/Sun)</option>
+              <option>11:00 (Sat/Sun)</option>
+              <option>12:00 (Sat/Sun)</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="players">Number of Players</label>
+            <select id="players" required>
+              <option value="">Select</option>
+              <option>1 (looking to join group)</option>
+              <option>2</option>
+              <option>3</option>
+              <option>4</option>
+              <option>5+</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="bookType">Booking Type</label>
+            <select id="bookType" required>
+              <option value="">Select type</option>
+              <option>Court hire</option>
+              <option>Wednesday Rec Play (R35)</option>
+              <option>Friday Americano (R50)</option>
+              <option>Group booking</option>
+              <option>Coaching / Lesson</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="notes">Notes (optional)</label>
+          <textarea id="notes" placeholder="Any special requests, skill level, or questions for us..."></textarea>
+        </div>
+        <button type="submit" class="form-submit">Send Booking Request</button>
+        <p class="form-note">We'll confirm your booking via WhatsApp or email within a few hours.</p>
+        <div class="success-msg" id="successMsg">
+          ✓ Booking request sent! We'll be in touch shortly to confirm. See you on the court!
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- FIND US -->
+<section id="find-us">
+  <div class="fade-in">
+    <div class="section-label">Location</div>
+    <h2>Find Us</h2>
+  </div>
+  <div class="find-grid">
+    <div class="contact-details fade-in">
+      <div class="contact-item">
+        <div class="contact-icon">📍</div>
+        <div>
+          <div class="contact-label">Address</div>
+          <div class="contact-value">Vanderbijlpark, Gauteng, South Africa</div>
+        </div>
+      </div>
+      <div class="contact-item">
+        <div class="contact-icon">🕐</div>
+        <div>
+          <div class="contact-label">Hours today</div>
+          <div class="contact-value" id="todayHours">Loading...</div>
+        </div>
+      </div>
+      <div class="contact-item">
+        <div class="contact-icon">📞</div>
+        <div>
+          <div class="contact-label">Phone / WhatsApp</div>
+          <div class="contact-value">Coming soon</div>
+        </div>
+      </div>
+      <div class="contact-item">
+        <div class="contact-icon">✉️</div>
+        <div>
+          <div class="contact-label">Email</div>
+          <div class="contact-value"><a href="mailto:info@thedinkhouse.co.za">info@thedinkhouse.co.za</a></div>
+        </div>
+      </div>
+      <div class="contact-item">
+        <div class="contact-icon">📸</div>
+        <div>
+          <div class="contact-label">Follow Us</div>
+          <div class="contact-value"><a href="#">@thedinkhouse</a> on Instagram &amp; Facebook</div>
+        </div>
+      </div>
+    </div>
+    <div class="map-placeholder fade-in">
+      <iframe
+        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d57374.10!2d27.8310!3d-26.7069!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x1e95a05a78d1a4ef%3A0x1234!2sVanderbijlpark%2C+Gauteng!5e0!3m2!1sen!2sza!4v1"
+        allowfullscreen="" loading="lazy"
+        referrerpolicy="no-referrer-when-downgrade"
+        title="The Dink House location map">
+      </iframe>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div>
+    <div class="footer-logo">The Dink <span>House</span></div>
+    <p style="margin-top:4px;">Vanderbijlpark's pickleball community hub.</p>
+  </div>
+  <div class="footer-links">
+    <a href="#hours">Hours</a>
+    <a href="#events">Events</a>
+    <a href="#booking">Book</a>
+    <a href="#find-us">Contact</a>
+  </div>
+  <p>© 2025 The Dink House. All rights reserved.</p>
+</footer>
+
+<script>
+  // Mobile menu
+  const hamburger = document.getElementById('hamburger');
+  const mobileMenu = document.getElementById('mobile-menu');
+  hamburger.addEventListener('click', () => mobileMenu.classList.toggle('open'));
+  function closeMenu() { mobileMenu.classList.remove('open'); }
+
+  // Today's hours
+  const hours = {
+    0: 'Closed today', // Sun - we'll handle public holiday elsewhere
+    1: 'Closed today',
+    2: 'Closed today',
+    3: 'Open 14:00 – 20:00',
+    4: 'Open 14:00 – 20:00',
+    5: 'Open 14:00 – 20:00',
+    6: 'Open 10:00 – 19:00',
+  };
+  const dayOverrides = { 0: 'Open 10:00 – 19:00' }; // Sunday
+  const today = new Date().getDay();
+  const todayEl = document.getElementById('todayHours');
+  if (today === 0) {
+    todayEl.textContent = 'Open 10:00 – 19:00';
+  } else {
+    todayEl.textContent = hours[today];
+    if (hours[today] === 'Closed today') {
+      todayEl.style.color = 'var(--muted)';
+    } else {
+      todayEl.style.color = 'var(--lime)';
+    }
+  }
+
+  // Booking form
+  document.getElementById('bookingForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const btn = this.querySelector('.form-submit');
+    btn.textContent = 'Sending...';
+    btn.disabled = true;
+    setTimeout(() => {
+      document.getElementById('successMsg').style.display = 'block';
+      btn.textContent = 'Request Sent!';
+      btn.style.background = '#5a8a10';
+      this.scrollIntoView({ behavior: 'smooth', block: 'end' });
+    }, 1000);
+  });
+
+  // Set min date on date input
+  const dateInput = document.getElementById('bookDate');
+  const today2 = new Date();
+  const yyyy = today2.getFullYear();
+  const mm = String(today2.getMonth()+1).padStart(2,'0');
+  const dd = String(today2.getDate()).padStart(2,'0');
+  dateInput.min = `${yyyy}-${mm}-${dd}`;
+
+  // Fade-in on scroll
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); } });
+  }, { threshold: 0.12 });
+  document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
