@@ -357,7 +357,7 @@ $('bookingForm').addEventListener('submit',e=>{
 });
 
 // cookie consent and gated map
-const MAP_SRC="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d57374.10!2d27.8310!3d-26.7069!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x1e95a05a78d1a4ef%3A0x1234!2sVanderbijlpark%2C+Gauteng!5e0!3m2!1sen!2sza!4v1";
+const MAP_SRC="https://www.google.com/maps?q=-26.738391,27.789864&z=16&output=embed";
 const KEY='dinkhouse-cookie-choice',cb=$('cb');
 const loadMap=()=>{$('mapBox').innerHTML='<iframe src="'+MAP_SRC+'" allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade" title="The Dink House location map"></iframe>'};
 const save=v=>{try{localStorage.setItem(KEY,v)}catch(e){}};
@@ -365,7 +365,7 @@ let choice=null;try{choice=localStorage.getItem(KEY)}catch(e){}
 if(choice==='accepted')loadMap();else if(choice!=='declined')cb.classList.add('on');
 $('cookieAccept').addEventListener('click',()=>{save('accepted');loadMap();cb.classList.remove('on')});
 $('cookieDecline').addEventListener('click',()=>{save('declined');cb.classList.remove('on')});
-$('loadMapBtn').addEventListener('click',()=>{save('accepted');loadMap();cb.classList.remove('on')});
+const lmb=$('loadMapBtn');if(lmb)lmb.addEventListener('click',()=>{save('accepted');loadMap();cb.classList.remove('on')});
 </script>
 </body>
 </html>
